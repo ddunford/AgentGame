@@ -1,6 +1,6 @@
 # Studio lessons — injected every session
 
-Hard-won, and cheap to forget. The doctrine in `CLAUDE.md` is the law; these are the field notes behind it.
+Hard-won, and cheap to forget. The doctrine in `AGENTS.md` is the law; these are the field notes behind it.
 
 - **The builder is the worst judge of their own work.** Every "it looks good" this project shipped from one flattering angle fell apart from another. QA and review are fresh, separate passes. (doctrine 1, 4)
 - **A tool returning success proves the tool ran, not that the work is right.** `placed=60` says the tool ran; bounds say `-128` while buildings float. Verify the *result*, from the *saved* state, from every view.

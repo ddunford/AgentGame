@@ -6,7 +6,7 @@ fires-when: A staffed-but-dormant discipline reaches its activation phase (guide
 
 # activate-discipline
 
-**Owner: `producer`** (who triggers the activation on schedule and confirms it landed) **+ the activating discipline** (who runs the on-ramp). Every discipline is staffed from day one but **dormant until its activation phase** (`guides/production-pipeline.md` §3.5); this is the procedure that brings one online without it joining a running build cold and re-deriving what the studio already settled.
+**Owner: `producer`** (who triggers the activation on schedule and confirms it landed) **+ the activating discipline** (who runs the on-ramp). Role briefs are available, but only disciplines selected by the game plan become active (`guides/production-pipeline.md` §3.5); this is the procedure that brings one online without it joining a running build cold and re-deriving what the studio already settled.
 
 It exists because a role that activates into a phases-deep build with no on-ramp either stalls while it reconstructs context or, worse, builds on assumptions the vault already closed. The on-ramp makes the first thing a newly-active discipline does *orient*, not *guess*.
 
@@ -14,14 +14,14 @@ Doctrine this enforces: **spec-first** (2) — a discipline produces its first a
 
 ## When it fires
 
-The producer activates a discipline at the phase §3.5 sets — not the moment its agent was authored. The **🔴 long-lead** activations are the ones this on-ramp matters most for, because they land in a build that is already moving and feed chains that cannot be spun up at their peak:
+The producer activates an applicable discipline when the consuming game plan requires it; §3.5 is a conditional catalogue, not a universal staffing mandate. For in-scope disciplines, activation follows the selected phase — not the moment its agent was authored. The **🔴 long-lead** activations are the ones this on-ramp matters most for, because they land in a build that is already moving and feed chains that cannot be spun up at their peak:
 - **P1:** `backend-engineer` (architect the schema), `trust-safety` (policy), `character-artist`→`animator` (identity + rig spike), `creator-tools-designer` (UGC spike), `localization` (externalize), `accessibility` (principles), `compliance-advisor` (framing), `performance-engineer` (budgets), `user-researcher`, `ui-ux-designer`, `concept-artist`, `narrative-designer`.
 - **P2:** `ai-engineer`, `build-engineer`, `analytics-engineer`, `vfx-artist`, `qa-functional`.
 - **P3–P4:** `monetization-designer`, `cinematics`, `live-ops`.
 
 ## Procedure — the on-ramp a role runs when it comes online
 
-1. **Read the spec.** [`SPEC.md`](../../../SPEC.md) at the repo root — what the game is and the per-phase definition-of-done — then the design detail under `docs/design/` for the area you own. Never build on the vault's edit history; read it as current (doctrine 12).
+1. **Read the spec.** the game’s declared specification (for example `SPEC.md` at the game root) — what the game is and the per-phase definition-of-done — then the design detail under `docs/design/` for the area you own. Never build on the vault's edit history; read it as current (doctrine 12).
 2. **Read your own guide.** Your craft depth lives in your `guides/` reference (mapped in `guides/production-pipeline.md` §3.1). It is your standing method; do not re-invent it.
 3. **Read the current plan and where the build actually is.** The open `plan/<phase>.md` and its "you are here" line, `plan/game-roadmap.md` for the arc, and `plan/risk-register.md` for any risk you now own or feed. You are joining mid-motion — know what has already shipped and what is in flight before you touch anything.
 4. **Read your handoff-graph row.** `guides/production-pipeline.md` §3.3 — who feeds *you* (you cannot finish before those upstream hand off) and whom *you* feed (they are waiting on you). This is the single most important orientation step for a long-lead role: it tells you why you activated now and what your late start would cascade into.

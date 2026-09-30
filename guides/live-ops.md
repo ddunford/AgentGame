@@ -7,7 +7,7 @@
 2. **No way back.** Shipping a live change with no rollback path and no measured baseline, so when it goes wrong there is neither a signal that it went wrong (that is `guides/analytics.md`'s job) nor a lever to undo it. Every live change is planned backwards from "how do we revert this."
 
 ## The Phase 5 gate — per live change
-Phase 5's gate is **per change**, and it is owner-reserved for anything public-facing, involving money, or irreversible (`.claude/CLAUDE.md`, `guides/production-pipeline.md §3.2`). Live-ops owns *running* that gate:
+Phase 5's gate is **per change**, and it is owner-reserved for anything public-facing, involving money, or irreversible (`<studio-root>/AGENTS.md`, `guides/production-pipeline.md §3.2`). Live-ops owns *running* that gate:
 - **Every content update runs the full gated loop** — build by the discipline owner, verified fresh by `qa-*` / `creative-review`, perf-gated (`guides/performance.md`), security-reviewed if it touches a client endpoint (`security-reviewer`). Live is not an exemption from the loop; it is the loop with real players downstream.
 - **Classify every change by blast radius and reversibility.** Cosmetic + reversible + no economy/public/money surface → agent-decidable, log it. Anything touching the economy, the public surface, real money, or player-persistent state → **owner-reserved**, framed with a recommendation and a rollback plan. The `decide` classification (`technical-director`) applies unchanged.
 - **A live change is not done when it deploys** — it is done when the post-deploy signal (`guides/analytics.md`) confirms it did what it intended and broke nothing, within the watch window.

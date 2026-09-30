@@ -86,7 +86,7 @@ Applies to any space built for confrontation or hazard — the unsafe districts,
 ## The multi-view verification battery (the "done" gate — run by `qa-visual`, a fresh pass)
 Re-shot **identically** every pass so changes are comparable, not cherry-picked:
 1. **Top-down (plan)** — matches the approved plan; footprints, widths, no unintended dead-ends; nothing overlapping/colliding.
-2. **Straight-on elevation** (per face) — real depth and varied massing (not a flat wall of same-height boxes); everything **seated** (verify with geometry-truth tools, backed by the human eye).
+2. **Straight-on elevation** (per face) — real depth and varied massing (not a flat wall of same-height boxes); everything **seated** (verify with reliable geometry measurements, backed by the human eye).
 3. **Eye-level walk** — walked with gravity/collision; player fits doors/passages; sightlines terminate on something meaningful; ground-floor has eye-height detail; enclosure varies.
 4. **Silhouette** — landmarks read as distinct black shapes against sky; hierarchy holds.
 
@@ -95,7 +95,7 @@ A single flattering angle is not QA. The builder never runs their own gate.
 **Capture discipline (or the battery lies) — `[MEASURED: 2026-07-21]`, smoke test:**
 - **Plan and elevation MUST be orthographic captures**, not a perspective camera pointed down/sideways. A perspective camera foreshortens, and foreshortening reads as *tilt and rotation that isn't there* — a fresh reviewer will (correctly, given the image) report walls "leaning" and a plinth "rotated" when the geometry is dead-on axis-aligned. False defects waste a verify cycle. Use an orthographic projection for views 1 & 2.
 - **Set manual exposure + a fill/skylight before capturing.** Blown-white or crushed-black frames make base/corner **seating unverifiable** — the reviewer cannot confirm "nothing floating, no base gaps", which is half the point of the battery. Underexposed silhouettes and bloomed overviews both fail this.
-- Corollary: pair the *human* elevation read with the *geometry-truth tool* (`measure_true_base`) — the tool gives the exact seated Z the eye can't, the eye gives the composition the tool can't. Neither alone is the gate.
+- Corollary: pair the *human* elevation read with a *reliable geometry measurement* (editor dimensions/component measurements or a verified optional audit tool) — the measurement establishes seating beyond visual impression, the eye gives the composition the measurement cannot. Neither alone is the gate.
 - **`CaptureTools.exposure_bias` is inverted — MORE NEGATIVE is BRIGHTER `[MEASURED: 2026-07-21]`.** This is the **capture tool's** convention and is the *opposite sign* of the register's post-process `ExposureCompensation` (positive = brighter, `guides/unreal-engine.md §5`) — don't conflate the two params. For this project's blockout, eye-level/hero perspective reads well at ≈ **-6.5**; orthographic elevations and the overhead plan need to go *further* negative (≈ **-8**) or they crush to near-black and seating is unverifiable. Sweep the bias per view rather than trusting one value across the battery.
 - **The overhead top-down ortho is the weakest footprint check on a flat-roofed blockout `[MEASURED: 2026-07-21]`.** Looking straight down at equal-height flat roofs under a temp rig gives almost no edge contrast, so footprints and gaps barely read at any exposure. Read footprints/widths from the **iso** view + the **geometry-truth dump** (authoritative XY bounds), and use the top-down only as a coarse cross-check. A tight, target-framed top-down of a single sub-area (e.g. one courtyard) reads far better than the whole-level plan.
 
@@ -103,7 +103,7 @@ A single flattering angle is not QA. The builder never runs their own gate.
 A blockout is ready to recommend for freeze when all of these hold — verified by a fresh pass (`qa-visual`), never self-signed:
 - **Matches the committed spec** — footprints, widths, heights, and landmark/door positions match plan and elevations within grid tolerance.
 - **Scale is right, walked.** Player fits every door and passage; ceilings, streets and vistas feel their intended size at eye height under gravity — not judged from the fly-cam.
-- **Solid and seated.** Volumetric massing, nothing floating, no base gaps — confirmed by the geometry-truth tool *and* the human eye, not by bounds.
+- **Solid and seated.** Volumetric massing, nothing floating, no base gaps — confirmed by the reliable geometry measurement *and* the human eye, not by bounds.
 - **Varied massing.** Real depth and height variation; not a flat wall of same-height boxes.
 - **Legible.** The player can place themselves and read where to go from any node; landmarks visible where orientation is needed; edges unmistakable.
 - **Composed.** Every major sightline terminates on something intended; the critical path is guided; branches signposted at the right certainty, neither over nor under.
@@ -138,7 +138,7 @@ The two structural failures the whole method exists to prevent (above), plus the
 - [ ] Enclosure alternates to match the intensity curve; at least one compression→release onto a framed landmark.
 - [ ] Every major sightline terminates on something intended.
 - [ ] Encounter spaces (where relevant) read on entry; cover to metric bands; ≥ one line through; chokepoints deliberate.
-- [ ] Everything seated — geometry-truth tool + eye.
+- [ ] Everything seated — reliable geometry measurement + eye.
 
 **Before recommending freeze:**
 - [ ] Quality bar met.

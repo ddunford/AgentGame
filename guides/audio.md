@@ -135,13 +135,11 @@ A soundscape is at bar when:
 
 ---
 
-## GENERATION — producing the raw audio (ElevenLabs)
+## Acquiring or generating audio
 
-Raw audio is **generated, not licensed from a pack** — via **ElevenLabs**, driven through the **authenticated site** with **Playwright MCP** + the `.env.services` login (the same browser-automation pattern as Fab acquisition, not an API key). The `sound-designer` agent owns the workflow; the pipeline mechanics a soundscape depends on:
+Use project-approved licensed recordings, packs or generation services through available supported tools. No provider, browser transport or credential-relay service is required. Follow host authentication rules; never copy secrets into logs or workflow documents.
 
-- **ElevenLabs Sound Effects returns Opus/Ogg — re-encode before import.** The download is Opus-in-Ogg; **decode it in-browser via the Web Audio API and re-encode to WAV (48 kHz / 16-bit)** before importing to `Content/<Project>/Audio/`. Import the WAV, never the raw Ogg.
-- **Set the duration explicitly for a loop bed — "Auto" defaults to ~1.5 s.** The generator's Auto duration produces a ~1.5 s clip, far too short for a seamless ambient bed. For a bed, set the duration explicitly (e.g. 30 s) and use the tool's **seamless-loop** mode — a 1.5 s "bed" that ticks like a metronome is the anti-fatigue failure of Principle 9, caught at the source.
-- **Never enter credentials as a tool-call parameter.** A Playwright **accessibility-tree snapshot can reflect a typed password value into the transcript** once — so relay credentials through a **localhost-only endpoint the browser fetches**, never as a `type`/`fill` parameter carrying the secret. **If a password is ever exposed this way, rotate it** — the rotation is the only thing that stops the exposure standing.
+Inspect the actual downloaded format and rights, convert through approved tools to an engine-supported format when necessary, and verify the saved import. Choose duration/loop treatment for the intended ambience and audition seams in the game. Provider defaults and output formats can change; verify them instead of inheriting a historical setting.
 
 ---
 

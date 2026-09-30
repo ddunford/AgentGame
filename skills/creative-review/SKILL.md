@@ -6,7 +6,7 @@ fires-when: Before committing to a design direction, at milestone close, when th
 
 # creative-review
 
-**Owner: `creative-review`** (Verify & Judge — judges, does not build). What "ours" means — the pitch, pillars, anti-goals, and the ranked emotional beats — lives in the game's vision/pitch doc and each space's own spec; the senior-eye-before-owner rule in `guides/workflow.md`; where this gate sits in the loop in `guides/production-pipeline.md`. This is the **"is it good, and is it ours"** call that no other discipline owns — every discipline can pass while the result is dead. **Always run as a fresh subagent:** the agent that built a thing is the worst judge of it.
+**Owner: `creative-review`** (Verify & Judge — judges, does not build). What "ours" means — the pitch, pillars, anti-goals, and the ranked emotional beats — lives in the game's vision/pitch doc and each space's own spec; the senior-eye-before-owner rule in `guides/workflow.md`; where this gate sits in the loop in `guides/production-pipeline.md`. This is the **"is it good, and is it ours"** call that no other discipline owns — every discipline can pass while the result is dead. **Always run as an independent reviewer (different agent/context or person):** the agent that built a thing is the worst judge of it.
 
 Doctrine this enforces: **build ≠ verify** (1) — the on-pitch judge is never the builder; **spec first** (2) — a defect is "doesn't match the spec," not an opinion.
 

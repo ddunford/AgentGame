@@ -8,7 +8,7 @@ fires-when: After a phase is decomposed (plan-milestone / bootstrap-from-spec) a
 
 **Owner: `tech-artist`.** `art-director` is consulted on the creative-quality and style-fit of every art asset — the breakdown names *what* is needed; the look-bible (`docs/design/art/look-bible.md`) decides whether a candidate is *ours*. Pipeline position: **decompose → asset-breakdown → `fab-acquire` → `ingest-asset` → build.** The downstream half already exists — `fab-acquire` gets a known free asset in, `ingest-asset` measures/curates/collision/budgets it, and `Tools/required-content.json` declares what is already in use. This is the missing upstream step that says, from the plan, *what to get in the first place*.
 
-Doctrine this enforces: **spec-first** (2) — the asset list is drawn from the committed spec and phase plan, never invented at build time; **complete or descope** (6) — nothing the phase builds is missing from the list, and a gap is surfaced, never silently faked. The buy→generate→compose order (free listings first) is the studio asset rule (`ROSTER.md` / project CLAUDE.md).
+Doctrine this enforces: **spec-first** (2) — the asset list is drawn from the committed spec and phase plan, never invented at build time; **complete or descope** (6) — nothing the phase builds is missing from the list, and a gap is surfaced, never silently faked. The buy→generate→compose order (free listings first) is the studio asset rule (`ROSTER.md` / project AGENTS.md).
 
 ## Procedure
 

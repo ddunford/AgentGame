@@ -1,6 +1,6 @@
 # Guide — How the studio works (the choreography)
 
-> The concrete task-flow. `CLAUDE.md` states the doctrine and the phase gates; this spells out *exactly* how a piece of work moves through the team, so a cold session (or the owner) can see the machine turn. For the level above this — the milestone-execution SOP, the phase×discipline deliverable map, and the discipline activation schedule — see `guides/production-pipeline.md`; this guide is its per-task detail.
+> The concrete task-flow. `AGENTS.md` states the doctrine and the phase gates; this spells out *exactly* how a piece of work moves through the team, so a cold session (or the owner) can see the machine turn. For the level above this — the milestone-execution SOP, the phase×discipline deliverable map, and the discipline activation schedule — see `guides/production-pipeline.md`; this guide is its per-task detail.
 
 ## The one-line shape
 **Owner intent → Producer plans → the right agent builds → a *fresh* agent verifies → a *fresh* agent judges → the gate → the owner.** Build and verify are never the same agent (doctrine 1).
@@ -12,32 +12,32 @@
 2. **Producer decomposes it** into `plan/<milestone>.md`. Every task gets, without exception:
    - an **owner** (an agent from `ROSTER.md`),
    - **acceptance criteria** (what "done" means, concretely),
-   - a **verification link** — which fresh agent checks it, or `[no-test: <reason>]` (doctrine 8).
+   - a **verification link** — which independent reviewer checks it, or `[no-test: <reason>]` (doctrine 8).
    - the applicable **cross-cutting design-in criteria** — externalize-strings on any player-facing text, accessibility-basics on any player-facing surface, and a compliance-framing flag on anything touching minors/data/payments/the public surface. These are cheap to design in now and ruinous to retrofit, so they ride on the task's acceptance in whatever phase it lands, ahead of their full P3 passes (`guides/production-pipeline.md` Part 1, "Cross-cutting acceptance criteria").
-   The phase file is the task **detail**; the live **queue** those tasks are worked from is `TODO.md` (repo root) — the flat, ordered, always-current checklist `team-execute` reads and keeps updated, carrying the single "you are here" line the Producer keeps true at all times (`guides/production-pipeline.md`, "What tracks what").
+   The phase file is the task **detail**; the live **queue** those tasks are worked from is the declared project queue (repo root) — the flat, ordered, always-current checklist `team-execute` reads and keeps updated, carrying the single "you are here" line the Producer keeps true at all times (`guides/production-pipeline.md`, "What tracks what").
 
 3. **Design before build (Directors gate).** For anything spatial, `level-designer` writes the committed spec (plan / metrics / elevations / hero views) *before* a primitive is placed. For a system, `game-designer` writes the spec. The relevant Director approves the spec. **No spec, no build** (doctrine 2).
 
 4. **Spike the unknowns first.** If an approach is a guess, build it in an **isolated throwaway map**, get `creative-director` review, then integrate into the main build — or discard (doctrine 3). The main map is never touched by unproven work.
 
-5. **Build — serial on the editor.** The owning build agent (`level-designer`, `gameplay-engineer`, `environment-artist`, `lighting-artist`, `sound-designer`, `network-engineer`, `tech-artist`) does the work, driving the editor per `guides/tooling-ue.md`. **Only one editor-mutating agent runs at a time** — the editor is single-threaded. Save, then work from the saved state.
+5. **Build — serial on the editor.** The owning build agent (`level-designer`, `gameplay-engineer`, `environment-artist`, `lighting-artist`, `sound-designer`, `network-engineer`, `tech-artist`) does the work, driving the editor per `guides/tooling-ue.md`. **Only one owner interacts with the live editor at a time** — the editor is single-threaded. Save, then work from the saved state.
 
-6. **Verify — fresh, and parallel where read-only.** The builder hands off; it does **not** sign its own work:
+6. **Verify — fresh, and parallel for file-only work.** The builder hands off; it does **not** sign its own work:
    - `qa-visual` — the multi-view battery (top-down / elevation / eye-level / silhouette) for anything rendered.
    - `qa-network` — server + 2 clients + the negative test for anything networked.
    - `qa-functional` — the spec-match correctness battery (happy path + edges/boundaries/invalid input/state transitions/system interactions) for any mechanic, system, economy rule, or save/load whose correctness isn't a rendered frame or a replicated value.
    - `security-reviewer` — every client-reachable endpoint; names the exploit each check prevents.
    - `perf-gate` — for hot-path or perf-sensitive work, `stat unit` before/after against the committed budget (the P3–P4 hard gate is the milestone-level version, `guides/production-pipeline.md`).
    - `engine-verifier` — any engine-behaviour claim the work rests on.
-   These are fresh subagents; read-only ones can run in parallel.
+   These are independent reviewers. File-only passes can run in parallel; live-editor captures, queries and PIE require sole ownership. If independent review cannot run, record the gate pending.
 
 7. **Judge — is it good / is it sound?** Two fresh-eyes judges, by surface:
-   - `creative-review` (always a fresh subagent) — for authored look/feel: spec-matches, then scores the ranked beats. Standing to say *off-pitch, stop*.
+   - `creative-review` (always an independent reviewer (different agent/context or person)) — for authored look/feel: spec-matches, then scores the ranked beats. Standing to say *off-pitch, stop*.
    - `code-review` — for any non-trivial C++/systems change, **before merge**: architecture, maintainability, convention, and the doctrine rules. The engineering equivalent of the creative senior eye — a fresh reviewer, **never the author** (doctrine 1). `qa-functional`/`qa-network`/`security-reviewer` ask *does it work / is it authoritative / can it be exploited*; `code-review` asks *is it sound*.
 
 8. **The gate.** The Producer assembles the verified + judged result. A phase gate (greenlight / slice / alpha / beta / gold) is crossed by the **Director/owner**, never on the builder's say-so. Owner-reserved calls (money, public surface, vision, irreversible) stop and wait for the owner.
 
-9. **Drain at close.** No open `TODO.md` item is left homeless: done / moved to `game-roadmap.md` / consciously dropped-with-reason (a debt with no phase attachment survives in the `TODO.md` "no other home" section). Then the phase file is signed off, its record kept as history.
+9. **Drain at close.** No open the declared project queue item is left homeless: done / moved to `game-roadmap.md` / consciously dropped-with-reason (a debt with no phase attachment survives in the the declared project queue "no other home" section). Then the phase file is signed off, its record kept as history.
 
 ## Level work — structural verification and visual QA are different gates
 Two different questions, run as two gates in this order:
@@ -50,7 +50,7 @@ Never fold the two into one gate. Structural defects are caught without a single
 ### Viewable before visual QA
 A level enters visual QA only when it is in a **self-contained, viewable state — it has a saved baseline lighting rig in the level**. A saved baseline lit state is part of "blockout done / ready for QA", not a later polish-only gate. No visual QA on an unlit level.
 
-A visual verdict never rests on lighting that isn't saved in the level. `CaptureTools` injects a transient sun/fill/skylight rig to make an unlit level legible enough to shoot (`guides/tooling-ue.md`) — that crutch produces an *image*, not a QA-of-record: the same level renders black in a real viewport, so the owner cannot reproduce what the tool "passed", and green checks diverge from what the owner sees. If a level needs a rig to be seen, the rig belongs in the saved level.
+A visual verdict never rests on lighting that isn't saved in the level. An optional capture tool may inject a transient sun/fill/skylight rig to make an unlit level legible enough to shoot (`guides/tooling-ue.md`) — that crutch produces an *image*, not a QA-of-record: the same level renders black in a real viewport, so the owner cannot reproduce what the tool "passed", and green checks diverge from what the owner sees. If a level needs a rig to be seen, the rig belongs in the saved level.
 
 ### Match process weight to the stakes — mechanical QA only
 Two different reviews run on built work, and only **one** of them scales to the stakes. Do not conflate them.
@@ -66,7 +66,7 @@ Any authored *look or feel* — lighting, set-dress, art, audio, any craft/creat
 This holds for crude and throwaway-ish work too. "Crude" excuses **low fidelity** — a rough shape, a placeholder texture, one register instead of two. It never excuses **unmotivated or nonsensical craft** — e.g. bare point lights floating in the middle of a street with no physical source — and it never excuses skipping the senior eye. Routing raw first-draft craft straight to the owner, in the name of speed or matching ceremony to stakes, is exactly the gate failure the gated studio exists to prevent (doctrine 1): the owner becomes the first competent set of eyes on unfinished work.
 
 ### Owner-in-the-loop, fast
-Prefer getting a **viewable artifact in front of the owner to walk** over long async QA cycles the owner can't see. Build it via batched game-thread scripting — one `py` pass, reusable / data-driven assembly — not hundreds of serial per-actor MCP calls, so iteration is minutes, not long runs.
+Prefer getting a **viewable artifact in front of the owner to walk** over long async QA cycles the owner can't see. Use the requested supported control method efficiently, preserving observable and reproducible results. Scripting is optional, not a prerequisite.
 
 But *fast* still means **through the senior craft eye first** (above): the artifact the owner walks has already passed `art-director` / `creative-review`. Speed comes from cheap iteration, never from making the owner the first reviewer.
 

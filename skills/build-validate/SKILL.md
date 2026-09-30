@@ -1,28 +1,15 @@
 ---
 name: build-validate
-description: Cook and package a target, boot the packaged artifact, smoke-test the critical path, and — for a server build — confirm the dedicated server boots and a client connects; a green editor proves none of this.
-fires-when: Before a build is called good — a release candidate, a milestone build, or wiring the build-validation stage into CI. Load-bearing from P2 onward, once a source-built dedicated server exists. A green editor session says nothing about a cooked build.
+description: Package the project’s declared target, launch the artifact and smoke-test its critical path with saved evidence; add server/client checks only for a server target.
+fires-when: Validating a milestone build or release candidate, or adding build verification to CI.
 ---
 
-# build-validate
+# Validate a build
 
-**Owner: `build-engineer`.** A green pipeline proves the build compiled, cooked, and passed its automation — never that the game is good; the verify/judge owners still run (doctrine 1). The cook/package steps, the dedicated-server-build reality, versioning, and content-integrity gates live in `guides/build-release.md`; the engine facts it rests on (a Launcher build cannot link `ElseCityServer`; cook/HLOD/lighting builds are not agent-triggerable; `Build.bat` runs editor-closed) live in `guides/unreal-engine.md §1–2`. Link, never restate.
+Owner: build-engineer. Read AGENTS.md, project target/build instructions and guides/tooling-ue.md. Verify installed engine/toolchain support for that target; do not infer a source-engine requirement for all packaging or assume a particular project server target.
 
-Doctrine this enforces: **complete or descope** (6) — a smoke-launch of the cooked artifact, never a zero exit code, is what proves the build runs; **build ≠ verify** (1) — this gates the build *out* of the pipeline into QA, it does not sign the game off.
-
-## Procedure
-
-1. **Cook and package the target to a launchable artifact.** Editor-closed, from a clean checkout where possible — a build that needs a human's local state is a snapshot, not a build (`guides/build-release.md`). A cook that "succeeds" while silently dropping content is the failure this catches.
-2. **Boot the packaged build.** Launch the cooked artifact itself — compiling and cooking prove nothing about whether the packaged binary starts. A build that won't boot is a fail, however green the pipeline.
-3. **Smoke-test the critical path.** The build loads its entry level, no missing content, no version-mismatch in the log, and the one path that must work runs. A smoke test is the minimum real proof, not the full QA battery (that is the verify owners).
-4. **For a server build: the dedicated server boots and a client connects.** The packaged server starts a genuine `NM_DedicatedServer` world and a client joins it. This requires a **source-built (or dev-container) engine** — a Launcher build cannot link `ElseCityServer` (`guides/unreal-engine.md §1`). Until that engine is stood up, server correctness runs on PIE-as-client / `UnrealEditor.exe -server`, and this step is deferred, not skipped — the gate is why the discipline activates at P2. The out-of-process `-server` + client route and its host scripts are documented in `guides/tooling-ue.md` (T-HOST) — teardown by captured PID, **never** `taskkill //IM UnrealEditor.exe`.
-5. **Gate content integrity, loud and specific.** Required-content manifest validated, dependency closure measured, dangling references caught — each failing with a named cause that stops the build, never degrading to something that only looks fine on a machine with the content.
-6. **Confirm the version stamp.** The artifact carries the one build/version id that crash reports and analytics join on — an unstamped build is an unactionable bug report waiting to happen.
-7. **Hand off; never self-ship.** A passing validation means it cooked and booted — the candidate goes to the verify/judge owners, and the release-to-public decision is framed for the owner (owner-reserved: public surface + irreversible).
-
-## Block these
-- Treating a zero exit code, or a green editor, as a validated build.
-- Chasing a packaged server target on a Launcher engine.
-- A cook that drops content or a build that boots with a version mismatch, passed silently.
-- An unstamped or clean-checkout-irreproducible artifact.
-- Self-shipping a candidate instead of handing it to the verify/judge owners.
+1. Record target, platform, engine/version, build configuration and reproducible inputs. Use the supported project build route with saved source/assets; coordinate any required editor closure and preserve work.
+2. Cook/package, inspect diagnostics and required-content/dependency integrity. A zero exit status is necessary evidence but not proof the artifact runs.
+3. Launch the packaged artifact itself. Test the declared critical path and check missing content, startup errors and version identity. Editor PIE is not a packaged pass.
+4. For a project that actually ships a server target, verify that target’s engine requirements, boot the server and connect a client. For a single-player target this step is not applicable, not a missing multiplayer feature.
+5. Return evidence and limitations to independent QA/review. Keep unavailable target tests pending; do not silently substitute another build. Publication remains governed by project/user authorization.

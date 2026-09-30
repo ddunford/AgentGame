@@ -62,7 +62,7 @@ The blockout was validated on foot; the dressing is too. Nothing here is judged 
 - **Scale consistency.** One human reference across the whole space; a prop that violates the established scale (door, step and player metrics live in `guides/level-design.md`) breaks belief instantly. Enforce texel density with a reference grid so surfaces share detail density ([RMCAD][rmcad]).
 - **Kitbash discipline.** Kitbash toward a clean silhouette and a coherent story, not toward "more stuff." Every kitbashed piece still answers *why is this here*.
 - **Seat everything.** Confirm true bases with `GeometryAuditTools` (`measure_true_base`, `sweep_interpenetration`), not lying actor bounds — a top-down capture catches edge-clumping and floaters the eye-level view hides. Props floating, clipped, or driven into tree trunks are the classic seat failures.
-- **Place only from the project content root.** Everything is placed from `Content/ElseCity` after `tech-artist`/`ingest-asset` has ingested it — never from a gitignored vendor path (works on this machine, nowhere else). See `CLAUDE.md` §Assets.
+- **Place only from the project content root.** Everything is placed from `Content/ElseCity` after `tech-artist`/`ingest-asset` has ingested it — never from a gitignored vendor path (works on this machine, nowhere else). See `AGENTS.md` §Assets.
 - **Iterate in stages, in context.** Reach ~50% across many elements and judge them *together* before finishing any one — "don't try to make the 100% final version of every asset" first ([Level Design Book][ldb]). Composition is judged as a whole; a perfect prop in a broken group is still broken.
 
 ---

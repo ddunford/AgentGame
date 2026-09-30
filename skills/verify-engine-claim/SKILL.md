@@ -12,8 +12,8 @@ fires-when: Before stating how UE works — a cvar's effect, an ini section, whe
 
 1. **State the claim precisely.** Reduce it to one testable assertion — "cvar X in ini section Y does Z", "API A is supported on this build", "toolset T can do U". A vague claim can't be verified.
 2. **Treat the source as a claim, not proof.** A doc, forum post, marketplace listing, this framework's own guides, or another agent's assertion is a *claim*. Only engine source settles it.
-3. **Locate the engine source.** Find the owning file in the engine tree (path in `guides/tooling-ue.md` / project CLAUDE.md). Read the actual definition — the cvar registration, the ini-read, the API signature, the default in the header.
-4. **Confirm runtime behaviour where it matters.** If the claim is about runtime effect, back the source read with a minimal live check (a `py` one-liner or console command via Remote Control per `guides/tooling-ue.md`) — but the citation, not the check, is the record.
+3. **Locate the engine source.** Find the owning file in the engine tree (path in `guides/tooling-ue.md` / project AGENTS.md). Read the actual definition — the cvar registration, the ini-read, the API signature, the default in the header.
+4. **Confirm runtime behaviour where it matters.** If the claim is about runtime effect, back the source read with a minimal live check (using available supported controls per `guides/tooling-ue.md`) — but the citation, not the check, is the record.
 5. **Don't conclude "impossible" from a `false`/empty return.** That usually means "called it wrong", not "the engine forbids it" — read the parameter schema / `describe_toolset` / source before concluding a capability is absent.
 6. **Record the finding as present-tense fact + `file:line` citation.** Either the verified claim or a correction of the asserted one, written-as-current (doctrine 12) — ready to write into the owning guide.
 7. **Backport immediately (doctrine 13).** An engine-behaviour fact goes into `guides/unreal-engine.md` with its citation; replace the `[verify]` tag in place with the cited fact or correction. A lesson that lives only in the session is lost.

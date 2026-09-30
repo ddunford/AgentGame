@@ -16,7 +16,7 @@ Doctrine this enforces: **spec-first** (2) — the plan is drawn from a committe
 
 - **`SPEC.md` owns** the top-level definition (pitch, the core reframe, pillars, anti-goals, audience, the core loop, the settled decisions in summary) **and the definition-of-done in full** (the game's per-phase gates). It is the entry point a cold reader opens first.
 - **The detailed design docs own the detail** — the loop elaborated, the feature-level acceptance, the spatial metrics, the look bible, the technical architecture. They live **in the repo** (`docs/design/`), and `SPEC.md` **links** them; it never restates their content. A summary spine plus a link is not duplication; a second copy of the detail is.
-- **`.claude/` owns studio process and engine/tooling knowledge — never game design.** The per-phase *deliverable checklist* (`guides/production-pipeline.md §3.2`) is process and stays there; `SPEC.md`'s definition-of-done is the *game-specific* gate for each phase and **links** §3.2 for the generic deliverables that operationalize it.
+- **`<studio-root>/` owns studio process and engine/tooling knowledge — never game design.** The per-phase *deliverable checklist* (`guides/production-pipeline.md §3.2`) is process and stays there; `SPEC.md`'s definition-of-done is the *game-specific* gate for each phase and **links** §3.2 for the generic deliverables that operationalize it.
 
 The point is self-containment: a fresh clone must answer "what is this game, and when is it done?" from the repo alone, with no external vault, wiki, or MCP server in the loop. Where a design vault exists elsewhere, it becomes the owner's **optional read-only mirror** — never a second source of truth. One home, in the repo.
 
@@ -38,7 +38,7 @@ The point is self-containment: a fresh clone must answer "what is this game, and
    - **The core loop** — the game's central loop, named and stated as the flywheel/verb spine; link the detail.
    - **Settled decisions** — the concept calls, the durable platform decisions, and any engineering ADRs, one line each; the **authoritative table with rationale stays in the decisions log** (link it), so `SPEC.md` carries the summary spine only.
    - **Definition-of-done, per phase** — the game's own gate for each phase (the current milestone's stated verbatim), linking `guides/production-pipeline.md §3.2` for the generic deliverable checklist that operationalizes each gate. This section `SPEC.md` **owns outright**.
-   - **A map** at the top: what `SPEC.md` owns, what `docs/design/` owns, what `.claude/` owns — so the boundaries are legible to the next reader.
+   - **A map** at the top: what `SPEC.md` owns, what `docs/design/` owns, what `<studio-root>/` owns — so the boundaries are legible to the next reader.
 5A. **State the one-source discipline** in `SPEC.md` and in a `docs/design/` README/index: the repo is now canonical; design edits happen here; any external vault is the owner's optional **read-only mirror**, not a second source of truth. Then run the coverage-check (step 2C) as a self-check before handing off.
 
    ---
@@ -64,7 +64,7 @@ The point is self-containment: a fresh clone must answer "what is this game, and
    - **Definition present** — pitch, reframe, pillars, anti-goals, audience, core loop, settled decisions summary are all in `SPEC.md`, each stated once and linking its detail doc.
    - **Definition-of-done present** — a per-phase gate for every phase, the current milestone's stated verbatim, linking §3.2. This is the section most often left thin.
    - **Detail is in-repo** — every design doc the source holds has a home under `docs/design/`; nothing `SPEC.md` links resolves only to an external vault/MCP/wiki. A clone can answer "what is the game + when is it done" from the repo alone.
-   - **No duplication** — `SPEC.md` summarizes and links; it does not restate the detail docs, and it does not restate `.claude/` process content. The decisions log, not `SPEC.md`, holds the authoritative rationale.
+   - **No duplication** — `SPEC.md` summarizes and links; it does not restate the detail docs, and it does not restate `<studio-root>/` process content. The decisions log, not `SPEC.md`, holds the authoritative rationale.
    - **One-source rule stated** — the repo-canonical / external-mirror-read-only discipline is written into `SPEC.md` and the `docs/design/` index.
 3C. **Report the coverage verdict** — complete, or a named list of what is missing or duplicated. If gaps exist, resolve them via Mode A (missing detail/synthesis) or surface them to the owner (missing owner-reserved answers); coverage-check finds gaps, it does not invent the content to fill owner-reserved ones.
 

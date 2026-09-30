@@ -1,6 +1,6 @@
 # Guide — The studio SOP (running a milestone end to end)
 
-> **The operating procedure for the whole studio: given a milestone or spec, exactly how it is run to done** — decompose → phases → tasks → per-task test-plan → build → testing → quality gate → review → close — with the owning agent and the method named at every step. `CLAUDE.md` states the doctrine and the phase gates; `guides/workflow.md` is the per-*task* choreography; **this is the milestone-level SOP that sits above both** and the phase×discipline reference the whole studio is measured against. It links the craft guides rather than restating them (one fact, one home).
+> **The operating procedure for the whole studio: given a milestone or spec, exactly how it is run to done** — decompose → phases → tasks → per-task test-plan → build → testing → quality gate → review → close — with the owning agent and the method named at every step. `AGENTS.md` states the doctrine and the phase gates; `guides/workflow.md` is the per-*task* choreography; **this is the milestone-level SOP that sits above both** and the phase×discipline reference the whole studio is measured against. It links the craft guides rather than restating them (one fact, one home).
 
 **How to read this doc.** Part 1 is the headline — the repeatable loop for running any milestone. Part 2 is the inventory of what the studio has to run it with. Part 3 is the reference layer the SOP points into: the discipline map, the per-phase deliverables, the handoff graph, and the activation schedule.
 
@@ -34,7 +34,7 @@ Everything below is driven by the **`producer`**, who owns *when and in what ord
   │ 7 REVIEW ........ fresh senior eyes ........... is it good / is it sound?
   │      └ art → creative-review · code → code-review (fresh, never author) │
   └──────────────────────────────────────────────────────────────────────┘
-        │  (loop per task; read-only steps parallel, editor-mutating steps serial)
+        │  (loop per task; file-only steps parallel, all live-editor steps serial)
         ▼
   8 CLOSE ........... producer .................. drain · retro · risk-walk · vault · gate · lessons
         │
@@ -52,11 +52,11 @@ Everything below is driven by the **`producer`**, who owns *when and in what ord
 | — | *Tech-design gate (engineering-heavy)* | `technical-director` (+ `backend-engineer` / `network-engineer` on their systems); fresh reviewer approves | `tech-design` | Committed TDD (problem/approach/data model/interfaces/failure modes) *before* build — the engineering equivalent of the spec-first gate (doctrine 2) |
 | — | *Spike unknowns* | the discipline agent, reviewed by `creative-director`; `engine-verifier` for engine claims | `spike` (isolated throwaway map, doctrine 3); `verify-engine-claim` for engine behaviour | Proven approach, backported to the vault, before the main build is touched |
 | 3 | **Test-plan** | the verifying agent (`qa-visual` / `qa-network` / `qa-functional` / `security-reviewer`) | its own battery, declared up front | Each task's test named *before* build, or `[no-test: <reason>]` — no third option (doctrine 8) |
-| 4 | **Build** | the discipline agent (see Part 3.1) | the craft guide + `guides/workflow.md`; tools per `guides/tooling-ue.md` | The work, saved; **serial on the editor** — one editor-mutating agent at a time |
+| 4 | **Build** | the discipline agent (see Part 3.1) | the craft guide + `guides/workflow.md`; tools per `guides/tooling-ue.md` | The work, saved; **serial on the editor** — one owner for all live-editor operations |
 | 4a | **Instrument** *(if it has a behavioural signal)* | `analytics-engineer` | instrument-as-you-build, not a retrofit | The events/metrics the feature's signal needs, wired in the same pass as the build — never bolted on after |
 | 5 | **Test** | `qa-visual`, `qa-network`, `qa-functional`, `security-reviewer`, `engine-verifier` — **fresh, never the builder** | multi-view battery · server+2-clients+negative test · spec-match functional battery · exploit enumeration · source check | Defects against the spec, or a clean pass |
 | 6 | **Quality gate** | the verify agents | pass/fail against the committed test-plan | *Is it broken / correct / secure?* — a defect is "doesn't match the spec," not an opinion |
-| 7 | **Review** | `art-director` / `creative-review` (art, on-pitch) · `code-review` (engineering soundness) — **always a fresh subagent, never the author** | senior craft/creative judgement (`creative-review`); engineering is-it-sound judgement (`code-review`) | *Is it good / is it ours / is it sound?* — standing to say off-pitch, stop |
+| 7 | **Review** | `art-director` / `creative-review` (art, on-pitch) · `code-review` (engineering soundness) — **always an independent reviewer (different agent/context or person), never the author** | senior craft/creative judgement (`creative-review`); engineering is-it-sound judgement (`code-review`) | *Is it good / is it ours / is it sound?* — standing to say off-pitch, stop |
 | 8 | **Close** | `producer` | drain rule (doctrine 6); `process-retro`; `plan/risk-register.md` walk; `knowledge-keeper` for the vault; doctrine 13 for lessons | Every task done/moved/dropped-with-reason · process retro run (`plan/<phase>-retro.md`) · risk register walked row-by-row · vault describes **what was built** · phase file signed off · lessons written into the owning guide · remaining phases re-scoped |
 
 ## The inner loop is the whole game
@@ -80,7 +80,7 @@ These fire in whatever phase the task lands in. The **full** localization pipeli
 
 ## Serial vs parallel
 
-The **editor is single-threaded** — MCP calls run on the game thread and deadlock if concurrent (`guides/tooling-ue.md`). So the producer parallelizes only **read-only** owners (reviews, audits, research) and serializes every editor-mutating step. A task with a visual *and* networked surface goes to `qa-visual` *and* `qa-network`; those read-only passes can run together.
+One owner operates the live editor, including captures, PIE and state-dependent queries. File-only research/review may run in parallel. Transfer editor ownership explicitly; see `guides/tooling-ue.md`. This is a workflow coordination rule, not a universal engine deadlock claim.
 
 ## Decision rights inside the loop
 
@@ -93,17 +93,17 @@ Outstanding work and truth are tracked in distinct places, each owning one scope
 
 | Tracker | Owns | Lifecycle |
 |---|---|---|
-| **`TODO.md`** (repo root) | **The live driver** — the flat, ordered, always-current queue of the active phase's work: what's next / in-progress / blocked / done, plus the single "you are here" line. `team-execute` picks the next open item and keeps it current as it works. | Live; drained at phase close |
+| **the declared project queue** (repo root) | **The live driver** — the flat, ordered, always-current queue of the active phase's work: what's next / in-progress / blocked / done, plus the single "you are here" line. `team-execute` picks the next open item and keeps it current as it works. | Live; drained at phase close |
 | **`plan/<phase>.md`** | **Task detail** — each queue item's owner, acceptance criteria, test-plan, and verify/judge owners. The queue links to it; it does not restate the queue's status. | Signed off at close, kept as history. Committed |
 | **`plan/game-roadmap.md`** | Milestone/phase status and definitions of done | Durable |
 | **`plan/risk-register.md`** | Risks — owner, mitigation, review-gate | Durable; walked every close |
 | **`SPEC.md` + `docs/design/`** | The spec — what the game is and the per-phase DoD | Durable |
 
-`TODO.md` is the *queue + status*; the phase file is the *detail*. `team-execute` keeps the two in sync — each TODO item references its phase-file task, and detail is never copied down into the queue. Small debts with no phase task also live in `TODO.md` (its "no other home" section), and survive there across a gate until they land somewhere.
+the declared project queue is the *queue + status*; the phase file is the *detail*. `team-execute` keeps the two in sync — each queue item references its phase-file task, and detail is never copied down into the queue. Small debts with no phase task also live in the declared project queue (its "no other home" section), and survive there across a gate until they land somewhere.
 
 ## Close — the drain rule (doctrine 6)
 
-A phase file is signed off **only when every open item in `TODO.md` has a new home**: done · moved to `game-roadmap.md` · consciously dropped *with a reason* (a debt with no phase attachment survives in the `TODO.md` "no other home" section). Then: confirm the vault describes what was **built**, not what was planned; update `game-roadmap.md`; capture every lesson into its owning guide **in the same session** (doctrine 13). "We'll remember" is not one of the options.
+A phase file is signed off **only when every open item in the declared project queue has a new home**: done · moved to `game-roadmap.md` · consciously dropped *with a reason* (a debt with no phase attachment survives in the the declared project queue "no other home" section). Then: confirm the vault describes what was **built**, not what was planned; update `game-roadmap.md`; capture every lesson into its owning guide **in the same session** (doctrine 13). "We'll remember" is not one of the options.
 
 **Then two required close sub-steps run before sign-off:**
 - **Process retro** (`process-retro`, owner `producer`) — interrogate how the studio *worked* this phase: what in the SOP, a skill, or an agent's method failed, was missing, or slowed the phase down, and feed the fix back into the process the same session. Produces a committed `plan/<phase>-retro.md`. This is distinct from doctrine-13 craft-lesson capture (which fixes the *content* of a craft/engine lesson into its guide); the retro fixes the *process*.
@@ -113,7 +113,7 @@ A phase file is signed off **only when every open item in `TODO.md` has a new ho
 
 ## Skills this SOP references
 
-The callable procedures in `.claude/skills/` that this SOP dispatches to, grouped by where they sit in the loop:
+The callable procedures in `<studio-root>/skills/` that this SOP dispatches to, grouped by where they sit in the loop:
 
 - **Orient & plan:** `resume-work` (cold-session pickup) · `bootstrap-from-spec` (standup → phase roadmap) · `plan-milestone` (frame + decompose) · `asset-breakdown` (phase bill-of-materials) · `team-execute` (the producer autopilot).
 - **Establish truth before building:** `verify-engine-claim` (`engine-verifier`) · `vault-doc-update` (`knowledge-keeper`) · `tech-design` (engineering-heavy TDD, pre-build) · `spike` (prove an unknown in isolation, backport or discard).
@@ -133,40 +133,29 @@ The SOP points at real resources. Here is the inventory.
 
 **41 agents authored** — the full leadership spine, the build departments (design, including narrative and creator tooling; art, including character art, animation, concept, VFX and cinematics; engineering, including backend, performance, build/CI and crowd/NPC AI; audio), the builder-independent Verify & Judge layer, Knowledge, and the operate-at-scale disciplines a persistent social world needs (moderation/trust & safety, live-ops, monetization, analytics, localization, accessibility, compliance). Every discipline in the map is staffed. A role activates — goes on the critical path — at the phase the activation schedule (3.5) sets, not the moment it is authored; a role scheduled for a later phase is staffed now and dormant until then. `ROSTER.md` names the roster; Part 3.1 maps each discipline to its phase and status.
 
-## Skills — the callable procedures (`.claude/skills/`)
+## Skills — the callable procedures (`<studio-root>/skills/`)
 
-**Authored and callable.** The SOP dispatches to them at the steps and gates named in Part 1; the full inventory grouped by loop stage is in "Skills this SOP references" above. Each skill owns its *how*; the SOP owns *when and in what order*. The only unwritten ones are the deferred cross-cutting passes scheduled in §3.5 (authored at their activation phase); until then their method lives in the owning agent's definition.
+**Authored procedures, loaded through the chosen host.** The SOP dispatches to them at the steps and gates named in Part 1; the full inventory grouped by loop stage is in "Skills this SOP references" above. Each skill owns its *how*; the SOP owns *when and in what order*. The only unwritten ones are the deferred cross-cutting passes scheduled in §3.5 (authored at their activation phase); until then their method lives in the owning agent's definition.
 
-## Modules — reusable system contracts (`.claude/modules/`)
+## Modules — reusable system contracts (`<studio-root>/modules/`)
 
 **Not yet scaffolded.** Referenced by the constitution; authored when a system is stable enough to have a fixed "same config in, same result out" contract.
 
-## Tools & plugins — the hands in the editor
+## Controls and optional integrations
 
-Full rules and the which-surface-for-which-job decision live in **`guides/tooling-ue.md`** (mandatory before any editor work). In brief:
-
-- **Our toolkit — `ue-mcp-toolkit`** (the gaps and the reliable, structured operations we own; exact tool names and their behaviour live in `guides/tooling-ue.md`):
-  - **`GeometryAuditTools`** — true base transforms from ISM instances (not lying actor bounds), interpenetration sweeps. Catches floating/colliding geometry the eye and naïve bounds miss.
-  - **`ContentAuditTools`** — mesh-path audit, dependency-closure measurement, dangling-reference and required-content validation. Catches vendor-path leakage and missing packs before they ship.
-  - **`CaptureTools`** — orthographic/perspective viewport captures (`capture_view` / `capture_battery`) for the QA multi-view battery.
-  - **`NetworkHarnessTools`** — the PIE multiplayer harness (`begin_session` sets the net-mode CDO and starts server + N clients in one process; asserts pawn state from all parties; `end_session` restores the CDO) that `qa-network` drives.
-  - **`BlockoutTools`** — `build_blockout` spawns solid, metric-scale massing from a JSON definition for the spec-matched whitebox; idempotent, exact seating by construction.
-  - **`BrowserToolset`** — drives embedded CEF panels; the route to automated Fab acquisition.
-- **Epic's MCP toolsets** (~53 registered: `SceneTools`, `ObjectTools`, `BlueprintTools`, `StaticMeshTools`, `MaterialTools`, …) — the standard editor operations Epic covers well. Always confirm a tool via `list_toolsets`/`describe_toolset` before relying on it; qualify names fully (`EditorToolset.EditorAppToolset`).
-- **Remote Control** (`localhost:30010`, `py`/console) — arbitrary game-thread Python and console commands, for the long tail Epic's toolsets don't cover.
-- **The Fab route** — search Fab and add a **free** pack without leaving the editor, driving the Fab panel's CEF browser via `BrowserToolset` (the `fab-acquire` method). Hands off to asset ingest at `Content/`.
-
-The rule (`guides/tooling-ue.md`): **Unreal's MCP for what it does well · Remote Control for the long tail · our toolkit for the gaps and anything we need reliable and structured.** When a recurring job is fiddly over the raw route, that is the signal to build a toolkit tool for it.
+Use available supported controls per `guides/tooling-ue.md`. Computer control is a first-class route. MCP, Remote Control and toolkit details are optional integrations, not studio prerequisites. Tool inventory and measured capabilities belong to the consuming environment, not this generic phase map.
 
 ---
 
-# Part 3 — Reference: the phase × discipline map
+# Part 3 — Conditional discipline catalogue
+
+This catalogue includes online-world examples. Apply each deliverable only when its feature/target is in the consuming game’s scope: backend, dedicated servers, replication, UGC, economy, payments and live operations are not requirements for a single-player POC. Record applicable gates in the project plan rather than copying the whole catalogue. Examples of project stages, trademarks or deployment stacks are not current facts about the consuming game.
 
 The SOP above dispatches to disciplines; this is the map of them — who they are, what each phase needs from them, who feeds whom, and when each activates.
 
 ## 3.1 The discipline map
 
-All disciplines a game of this ambition needs, grouped by where they sit in the studio. Every row is **HAVE** — an agent plus its guide/method exists. Staffing is complete; what varies between disciplines is *when* each activates, which is where the activation schedule (3.5) — the phase each role goes on the critical path — takes over. Craft depth lives in the linked guide; this table does not restate it.
+All disciplines a game of this ambition needs, grouped by where they sit in the studio. Every row is **HAVE** — an agent plus its guide/method exists. Role briefs exist; live workers and expertise are not implied. what varies between disciplines is *when* each activates, which is where the activation schedule (3.5) — the phase each role goes on the critical path — takes over. Craft depth lives in the linked guide; this table does not restate it.
 
 ### Leadership spine — owner-reserved authority
 | Discipline | Owner | Status | Method / guide |
@@ -253,7 +242,7 @@ Each phase passes its gate only when its deliverables **exist and are committed*
 - Top technical risks & rough feasibility read — `technical-director`.
 - `roadmap.md` with each phase's definition of done, and the design vault scaffolded — `producer` + `knowledge-keeper`.
 - **The activation schedule (3.5) reviewed and its early-activation calls confirmed by the owner.**
-- *Gate:* the owner greenlights the pitch. *(ElseCity is here — Stage 0.)*
+- *Gate:* the owner greenlights the pitch.
 
 ### Phase 1 — Preproduction → gate: **vertical slice approved ("found the fun, and it's feasible")**
 - Committed spec (plan / metrics / canonical views) for the slice — `level-designer` + `game-designer`.

@@ -2,7 +2,7 @@
 
 > Read before designing, modelling, or ingesting any character. The core idea: **a character is not a prop with a face — it is a shape that must read at a glance, deform without breaking, and rig onto a skeleton the animation and gameplay chain already expects.** Appeal is authored, deformation is engineered, and the skeleton is a contract. A mesh that looks right in a T-pose and folds into spaghetti at the elbow has failed; so has a beautiful one that lands on the wrong skeleton and cannot be animated.
 
-The `character-artist` agent carries the short rules; this is the depth behind them. It is the **head of the character chain** — its output is the thing everything downstream deforms, rigs, animates, and drives. It sits under `guides/art-direction.md` (which owns the world's shape language, palette, and the on-style rubric this must satisfy) and hands off to `guides/animation.md`. It does **not** re-own asset ingest, collision, or budget *enforcement* — those live with `tech-artist` / the ingest flow (`CLAUDE.md` §Assets); this guide owns the character-specific craft that must be right *before* ingest can pass.
+The `character-artist` agent carries the short rules; this is the depth behind them. It is the **head of the character chain** — its output is the thing everything downstream deforms, rigs, animates, and drives. It sits under `guides/art-direction.md` (which owns the world's shape language, palette, and the on-style rubric this must satisfy) and hands off to `guides/animation.md`. It does **not** re-own asset ingest, collision, or budget *enforcement* — those live with `tech-artist` / the ingest flow (`AGENTS.md` §Assets); this guide owns the character-specific craft that must be right *before* ingest can pass.
 
 ## The pipeline this heads
 
@@ -73,7 +73,7 @@ The model exists to be deformed. Every topology choice is judged by how it bends
 
 ### 7. MetaHuman & the acquisition route — buy before you build
 - **Buy → generate → author, same as every asset.** The fastest route to a rig-ready, LOD'd, skeleton-compatible human is usually **MetaHuman** or a **Fab/Megascans** character, not a from-scratch sculpt. MetaHuman ships appeal, topology, UVs, LODs, and a standard skeleton already solved — the design work becomes *selection and customisation* against the look-bible, not raw modelling. `[verify — web pass]` for MetaHuman's current skeleton compatibility with the project Manny retarget path and its LOD/bone-count profile.
-- **Acquisition is the ingest flow's job, not this guide's.** Fab/Megascans/MetaHuman acquisition, curation into `Content/ElseCity`, collision, budget class, and provenance are owned by `tech-artist` / `ingest-asset` (`CLAUDE.md` §Assets) — do not duplicate that mechanism here. This guide decides *what character* and *whether it's on-model and rig-ready*; the ingest flow makes it run and pipeline cleanly.
+- **Acquisition is the ingest flow's job, not this guide's.** Fab/Megascans/MetaHuman acquisition, curation into `Content/ElseCity`, collision, budget class, and provenance are owned by `tech-artist` / `ingest-asset` (`AGENTS.md` §Assets) — do not duplicate that mechanism here. This guide decides *what character* and *whether it's on-model and rig-ready*; the ingest flow makes it run and pipeline cleanly.
 - **A bought character still faces the on-style rubric.** MetaHuman-default or a Fab human is a starting point, not a pass — it goes to `art-director` / `creative-review` against the world's shape language and palette like anything else.
 
 ### 8. Hair & cloth (basic)
@@ -143,6 +143,6 @@ Craft grounded in the standard character-art references; specific numeric target
 - [The Ultimate Character Art Style Guide — RocketBrush][rb] — shape language and appeal, character stylisation. `[verify — web pass]`
 - Standard deformation-topology practice (edge loops at joints, quad-dominant deforming surfaces, face loops around eyes/mouth) — to be cited in the web pass. `[verify — web pass]`
 - Epic **MetaHuman** documentation — skeleton compatibility, LOD/bone profile, customisation route. `[verify — web pass]`
-- Cross-references (not duplicated here): `guides/art-direction.md` (shape language, palette, silhouette, on-style rubric), `guides/animation.md` (rig/retarget/deform-in-motion), `guides/level-design.md` (the ~176 cm metrics), `CLAUDE.md` §Assets + `tech-artist` (acquisition, collision, budget enforcement, provenance), `guides/unreal-engine.md` (engine facts).
+- Cross-references (not duplicated here): `guides/art-direction.md` (shape language, palette, silhouette, on-style rubric), `guides/animation.md` (rig/retarget/deform-in-motion), `guides/level-design.md` (the ~176 cm metrics), `AGENTS.md` §Assets + `tech-artist` (acquisition, collision, budget enforcement, provenance), `guides/unreal-engine.md` (engine facts).
 
 [rb]: https://rocketbrush.com/blog/the-ultimate-character-art-style-guide-for-artists-and-developers

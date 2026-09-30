@@ -1,35 +1,25 @@
 # GameClaude
 
-**A game-development studio, run as a team of agents** — a reusable operating system for building games with Claude. It takes a proven web-dev `.claude` framework's process rigour, staffs it with a **real game-studio team**, and wires it to **Unreal Engine 5**.
+An **AI-agent-agnostic game studio workflow**: roles, skills, craft guides and independent review. The name is retained for continuity; Claude, MCP, hooks and a companion toolkit are not requirements.
 
-The founding principle, learned the hard way: **whoever builds a thing never signs it off.** Build and verify are different owners; a tool returning success proves the tool ran, not that the work is right.
+Start with [AGENTS.md](AGENTS.md), [ROSTER.md](ROSTER.md) and [ONBOARDING.md](ONBOARDING.md).
 
-## The four primitives
-- **Agents** (`agents/`) — studio roles as personas (Director, Producer, Level Designer, Tech Artist, QA…). "Who owns this?"
-- **Skills** (`skills/`) — process checklists. "How do I run this?"
-- **Modules** (`modules/`) — reusable game-system contracts (a door, an ability, save/persistence). "Build this system."
-- **Guides** (`guides/`) — deep references the others link to. "Understand this domain."
+- agents/: 41 portable role briefs defining responsibilities and outputs.
+- skills/: workflow procedures from planning/spikes to QA and retrospectives.
+- guides/: production and craft references, loaded as needed.
+- adapters/: host integration contracts, separate from process.
+- hooks/: optional legacy Claude examples, inactive unless deliberately configured.
 
-Plus **hooks** (`hooks/`, guards + context + progress) and **orchestration** (`skills/team-execute` + autopilot).
+Reusable system contracts may be added under modules/ when authored; no such runtime dependency is required. These documents do not launch workers, guarantee expertise or grant permissions.
 
-Start with **`CLAUDE.md`** (the constitution), **`ROSTER.md`** (the team), and **`guides/tooling-ue.md`** (how to drive the editor).
+## Use in a game
 
-## How it's packaged — three repos
-1. **GameClaude** (this) — the workflow. Installs as a game project's `.claude/`.
-2. **`ue-mcp-toolkit`** — our reusable Unreal automation (geometry/content audit + capture + PIE test harness + blockout + Remote-Control config + the Fab/asset browser control). Drops into the game project's `Plugins/`. Extends Epic's in-engine MCP; does not fork it.
-3. **The game** — the actual UE5 title. Consumes both.
+Keep a reviewed pinned checkout/snapshot, for example at .studio/GameClaude/. Link its AGENTS.md from the game’s root instructions. Record project paths, task tracker, available controls and constraints in a game-local adapter; see [adapter guidance](adapters/README.md). Existing Claude .claude/ installations can retain that layout and compatibility entrypoint.
 
-## Install (into a game project)
-```
-# in the game repo root:
-git clone <GameClaude-url> .claude
-# then install ue-mcp-toolkit into Plugins/ and enable Epic's
-# ModelContextProtocol + AllToolsets + RemoteControl (see guides/tooling-ue.md)
-```
+The studio owns reusable process. The game owns domain research, vision, settings, assets, licences, tasks and evidence. Do not duplicate its task queue.
 
-## Status — scaffold in progress
-✅ Constitution (`CLAUDE.md`) · tool-routing + full-editor-access guide · level-design method · agent template · roster · flagship agent (`level-designer`).
-Next: author the priority agents (`producer`, `director`, `game-designer`, `tech-artist`, `tools-programmer`) and the Verify & Judge layer; port the proven trial-1 disciplines; spin out `ue-mcp-toolkit`. See `ROSTER.md` for the full build order.
+Computer control, engine APIs, CLI and MCP are possible control methods. Discover actual capabilities and honour user preferences. [Tool routing](guides/tooling-ue.md) specifies observable outcomes; old MCP details remain an optional reference. Documentation checks do not prove live gameplay or native integration on every host.
 
----
-© 2026 Munero Limited.
+## Licence
+
+Copyright ©2026 Munero Limited. [LICENSE](LICENSE) remains all rights reserved, licence TBD/internal studio framework. This change does not relicense the repository or call it open source.
