@@ -28,7 +28,10 @@ Doctrine this enforces: **build ≠ verify** (1) — the judge never built the c
    video plus a 6–12 frame contact sheet. Then:
    - **Measure before looking.** Set the pop threshold first (e.g. no single-frame change in the subject region larger
      than 3× the median frame-to-frame change); report every frame that exceeds it, and any flicker from sampling noise
-     or exposure pumping.
+     or exposure pumping. A raw luminance-difference threshold also fires on real lighting events (the subject
+     crossing the sun, a shadow sweeping the ground), so pair it with a shape test: a pop is a one-frame spike, or a
+     jump that reverses on the next frame; a multi-frame ramp is a lighting event for the judge to look at, not a
+     render fault.
    - **Compare against real time-lapse or footage** matched in subject, distance and time compression. Where speeds can
      be measured (growth, rise, spread, drift), check them against real measured ranges, not against how it feels.
    - **Ask the judge** whether the motion reads as real at this compression, and to name motion give-aways (rubric:
