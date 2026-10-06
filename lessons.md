@@ -10,4 +10,6 @@ Hard-won, and cheap to forget. The doctrine in `AGENTS.md` is the law; these are
 - **Never `taskkill //IM UnrealEditor.exe`** — it can take the owner's editor with it. One captured PID, or shut a `-server` run from inside.
 - **Assets: measure before use** (bounds lie), place from the project content root (not a vendor path), record provenance.
 - **Verify engine behaviour against source** before asserting or building on it. A doc/forum/marketplace claim is not proof.
+- **Bound the lever before sweeping it.** Run one extreme first to prove the lever can reach the target at all. After two or three single-variable losses in a row, stop and do a structural check — is the live build the source you think, read the whole code path, how does shipped work solve it — instead of trial four.
+- **Find the bottleneck with a known-good input.** Before iterating on content, put a known-real asset (a published reference scan or dataset, test-only) through the same renderer or pipeline. If it also looks wrong, the limit is lighting/rendering, not your content.
 - **Complete or descope; `[x]` means verified.** No placeholders, no silent scope cuts, no hopeful ticks.
