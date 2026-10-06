@@ -22,6 +22,19 @@ Doctrine this enforces: **build ≠ verify** (1) — the judge never built the c
 2. **Check the inputs are what they claim** — the capture contract's crop check (`qa-visual-battery`), images at the same height, and no names or captions that reveal which is which.
 3. **Build a shuffled blind set.** Mix the candidate render(s) with the matched photos **and** the controls — the current baseline render and, where useful, a known-bad render — under neutral names, with the key kept by the producer, not the judge. Controls show whether the judge can tell renders apart at all and whether the candidate moved.
 4. **Measure what can be measured, on render and references alike** — e.g. lit-face vs adjacent-background luminance ratio, shadow vs lit ratio, darkest region vs background, horizon vs higher-sky brightness, white balance of lit and shaded faces, edge width at matched angular size, saturation, coverage. Report the render against the reference **range** (min–max over the matched photos); a value outside the range is a named gap.
+4b. **Judge motion with a time-lapse whenever the subject evolves or moves** (weather, water, fire, foliage, crowds,
+   growth). Stills never prove motion. Render the candidate's whole life from a fixed tripod view, at a stated time
+   compression, with lighting that changes as it really would over that span (no staged light), and encode it as a
+   video plus a 6–12 frame contact sheet. Then:
+   - **Measure before looking.** Set the pop threshold first (e.g. no single-frame change in the subject region larger
+     than 3× the median frame-to-frame change); report every frame that exceeds it, and any flicker from sampling noise
+     or exposure pumping.
+   - **Compare against real time-lapse or footage** matched in subject, distance and time compression. Where speeds can
+     be measured (growth, rise, spread, drift), check them against real measured ranges, not against how it feels.
+   - **Ask the judge** whether the motion reads as real at this compression, and to name motion give-aways (rubric:
+     *Motion*).
+   - A video labelled for the public states that it is an engine time-lapse and its compression; it is not presented as
+     real-time gameplay.
 5. **Run the fresh judge.** A new agent/context or person that did not build the change, given only the blind set, the matched-reference rationale and this rubric. Ask:
    - "Which of these are photographs and which are renders, and why?"
    - "Could this pass for a photo taken from the same spot?"
@@ -35,7 +48,10 @@ Doctrine this enforces: **build ≠ verify** (1) — the judge never built the c
 - **Atmosphere:** no aerial perspective with distance, no haze gradient, wrong horizon brightness for the light.
 - **Scale:** no distance cues, wrong proportions between parts, the subject not dwarfing what it should.
 - **Camera:** an exposure no real camera would pick, no highlight roll-off, bloom/flare the photos lack, a "CG-clean" surface.
-- **Motion** (when judged in motion): speeds against real time-lapse or footage; popping.
+- **Motion** (when judged in motion): speeds outside real time-lapse or footage; popping or sudden jumps between
+  frames; texture swimming or sliding over a form instead of the form itself changing; everything moving at one
+  uniform rate; the whole subject changing at once instead of parts evolving in their own time; no internal churn
+  where the real thing boils or rolls; flicker from sampling noise or exposure.
 
 ## Report
 Per judged set: the sheet path, the matched references and why each matches, the blind key (revealed after judging), the measured table (render vs reference range), the judge's give-away list with 0–3 scores and ranking, the verdict, and what was not judged. Record a FAIL as a FAIL in the task tracker and any progress diary. Never state or imply realism to the owner without a sheet and a fresh verdict behind it.
