@@ -22,7 +22,9 @@ Computer control can work without MCP; an available API can still help. Honour t
 - Wait for compilation/preparation before judging blank views.
 - Verify gameplay in the actual possessed player view with intended movement/input. Editor cameras, temporary capture lighting and teleported pawns do not prove the player experience.
 - Record relevant versions, map/seed, settings, timing and evidence. Old surveys do not prove new-session access.
+- A floating modal or log window can take scripted console input while the call still reports success, so the command never runs (or fires later in the wrong session). Close such windows first and check the command actually ran — e.g. exactly one expected marker line in the log.
 - Avoid routine app closure. Save and explain necessary restarts; never kill every process sharing an editor image name to stop one test.
+- After a crash, copy the crash folder and logs before restarting, and check the OS event log: corrected hardware errors (e.g. WHEA machine-check events) before the crash point to the machine, not the build. Never retry blindly.
 - Tool success means the operation returned, not that the acceptance criteria passed. Use an independent reviewer.
 
 ## Optional integration reference
