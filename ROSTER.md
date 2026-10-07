@@ -1,5 +1,7 @@
 # The Studio Roster
 
+Review coverage and task closure follow [review-gate](skills/review-gate/SKILL.md): classify the change, register mandatory independent reviews, and record their verdicts before closing.
+
 The team, as agents. Three leadership **spines** meet in one **Director** (owner-reserved); departments hang off them; **Verify & Judge** gates work out, independent of who built it; **Operate** runs the live game at scale. Solo, these are hats — but the hats never merge build with verify.
 
 **Departments:** `DIR` Direction · `DSN` Design · `ART` Art · `ENG` Engineering · `AUD` Audio · `V&J` Verify & Judge · `OPS` Operate · `PROD` Production & Knowledge.
