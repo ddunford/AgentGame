@@ -109,6 +109,37 @@ Keep both player navigation and storm visibility in the acceptance criteria.
   (`FogRendering.cpp:438,179`; `HeightFogCommon.ush:334-339,363-368`). A below-horizon fog discontinuity still needs
   its own readback and bound; do not attribute it from the ozone or ground tests alone.
 
+### Cloud direct light, ambient and veil bounds
+
+Verified in UE 5.8 on 2026-10-08; shader paths are under `Engine/Shaders/Private/`.
+With SkyAtmosphere present, cloud ambient uses its distant sky-light LUT, not SkyLight intensity
+(`VolumetricCloud.usf:723-738`). Sun illuminance scales the LUT (`SkyAtmosphere.usf:1458-1466`);
+a sun-intensity gain therefore does not prove direct sunlight. More SkyLight plus darker exposure
+can lift surfaces while blackening clouds and inverting ground/sky: the tested twilight family lost
+12/12 blind comparisons (baseline scores 1.5, candidate 1.0). Bound this separation before tuning.
+
+`bUsePerSampleAtmosphericLightTransmittance` selects outer-space illuminance times sample-position
+transmittance (`VolumetricCloud.usf:645-650,923-930`). Flag-off uses the CPU 500 m ground path
+(`Engine/Source/Runtime/Engine/Public/Rendering/SkyAtmosphereCommonData.cpp:231-269`).
+Planet occlusion returns zero (`SkyAtmosphereCommon.ush:254-257`). Overhead shadow heights are
+about 1 km at -1 and 8.7 km at -3; actual cloud height and local geometry matter. The tested
+low clouds showed no flag effect below the horizon; shadowed clouds receive distant sky ambient.
+Do not generalise this to high towers.
+
+At +1 the flag gave golden tops (+0.74 stop, R/B 0.97 -> 1.41), but exposed a clouds-on field veil
+(+144 luma). Bound one switch at a time: cloud `GroundAlbedo=(0,0,0)` removed 98%,
+`r.VolumetricCloud.EnableAerialPerspectiveSampling 0` removed 99% but lost distant-cloud fade,
+and `r.VolumetricRenderTarget 0` removed only 77%. Black cloud ground albedo retained fade and was
+selected for that scene; it also removes cloud-base ground bounce, to revisit when cloud structure
+changes. Ground bounce approximates ground transmittance with sample sun transmittance
+(`VolumetricCloud.usf:1025-1034`); AP is coverage/mean-depth weighted (`:1492-1541`), and samples
+outside the shell are skipped (`:892-898`). These bounds do not prove low cloud density or a
+specific reconstruction fault.
+
+The combined flag/black-albedo case won 10/11 non-tied blind pairs and cost +0.11 ms cloud pass
+in PIE, but retained sun-facing top clipping (up to 7.9%), seed-dependent warm ground tint and
+failed absolute realism. Record the tradeoffs; this is a diagnostic route, not a universal preset.
+
 ## Evidence and acceptance
 
 Retain per-shot state, seed, geometric sun elevation, camera, exposure, ON/OFF frames, baseline repeat noise,
