@@ -27,6 +27,7 @@ codex exec -s workspace-write -C <repo> -o <scratch>/<task>.last.md - < <scratch
 - **Write scope:** the exact file (or few files) it may create or edit. Everything else is read-only.
 - **Forbidden:** the editor (MCP and Remote Control), plugin or engine source unless assigned, large data and output directories (simulation output, evidence, captures) — name them. Recursive searches over data directories are forbidden too.
 - **Inputs by path and section,** not pasted history; state live facts with their readback paths and the ruled-out options so it does not re-propose them.
+- **Unreal C++ it cannot compile:** state that Unreal unity builds merge several `.cpp` files into one translation unit, so file-local helpers (anonymous namespace or `static`) must carry a name unique across the module (prefix with the file's subject, e.g. `TornadoSmooth`), and ask the worker to grep the module for each new free-function name before using it. A generic `Smooth`/`Clamp01`/`Lerp` helper collided with another file's and failed the build (verified 2026-10-08).
 - **Report:** what it did, files written with hashes, what it did not do or could not verify, inferred vs verified claims marked. Ask for a "not done" list; workers drop trailing items silently when they hit limits.
 
 ## Sandbox limits (workspace-write)
