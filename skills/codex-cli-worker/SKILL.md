@@ -33,6 +33,7 @@ codex exec -s workspace-write -C <repo> -o <scratch>/<task>.last.md - < <scratch
 - **Executables outside the workspace are blocked** ("Access is denied"), e.g. a system-installed ffmpeg. The engine's bundled Python runs but lacks numpy, Pillow and OpenCV. For image, video or numeric analysis the worker writes the script and the producer runs it, or the job goes to a host subagent instead.
 - **The task tracker CLI is not reachable** inside the sandbox. The producer posts the tracker comment from the worker's last message.
 - Network and credential use follow the sandbox; never hand it secrets in the brief.
+- **Some workspace folders are read-only to it**, e.g. a hidden agent-skills folder such as `.agents/`, while a submodule or `docs/` stays writable. For files there, the brief asks for complete replacement files in a staging folder. The producer checks the diff is what was asked (`git diff --no-index --numstat`), then copies them into place.
 
 ## After the run
 1. Check the process exit and the last-message file exist and are non-empty.
