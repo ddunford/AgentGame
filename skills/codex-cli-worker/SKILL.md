@@ -19,7 +19,7 @@ codex exec -s workspace-write -C <repo> -o <scratch>/<task>.last.md - < <scratch
 ```
 - Run it in the background and wait for completion; do not poll it in a loop.
 - `-o` writes the worker's last message (its report); the log holds the full transcript.
-- The binary may not be on `PATH` (a desktop app can bundle it under its own install folder); record the path and version the project uses in the adapter.
+- The binary may not be on `PATH` in agent shells; launch using the **full path to codex.exe** and record the path and version in the project adapter. Check the first log line: redirected "command not found" can exit 127 silently into the log (verified 2026-10-08).
 - Briefs, logs and last-message files go in the project's git-ignored scratch folder.
 
 ## Brief rules

@@ -26,6 +26,7 @@ Doctrine this enforces: **verify claims against source** (10) — a live binary 
 1. **No other editor owner.** Confirm workers that drive or were launched from the editor have exited.
 2. **PIE stopped**, no transient trial values applied.
 3. **Save all and confirm clean.** A save script that logs the dirty list; anything still dirty stops the cycle.
+   - If a package is dirty only from read-only inspection and must not be saved, discard it before save-all with `unreal.EditorLoadingAndSavingUtils.reload_packages(pkgs, interaction_mode=<non-interactive enum value>)`. Inspect `unreal.ReloadPackagesInteractionMode` members in editor Python first. Default `INTERACTIVE` opens a modal that blocks the game thread, MCP and console; if already blocked, ask the owner to click. Confirm `get_dirty_content_packages()` is empty before rebuilding instead of saving unwanted state (verified 2026-10-08).
 4. **Exactly one editor process, its PID captured.** A second editor or a server process sharing the image name aborts the cycle — never kill by image name.
 5. **Clear the previous build result** so a stale success cannot be read as this build.
 6. **Start the build watcher outside the editor** (a background shell task, never a child of editor scripting): it waits for that PID to exit, refuses if any editor remains, builds the editor target with the editor closed, writes a result file and log, then relaunches the project.
@@ -36,6 +37,9 @@ Doctrine this enforces: **verify claims against source** (10) — a live binary 
 8. **Wait for the watcher's completion**, without a polling loop. Read the result code and the build line from the log. A watcher that relaunches after a failed build leaves the editor on the old binary — fix source and repeat; never accept an in-editor "rebuild modules" prompt as the build route.
 9. **Wait for the map to load in the NEW log**, then **reconnect** the control session (clear any cached session id). The relaunched editor writes a fresh log; the previous session's map-load and map-check lines (or a backed-up copy) satisfy a naive "wait for line X" at once. Wait on the new log's open timestamp first, then for its map-load and map-check lines. Right after load the console may print "type failed" or ignore input for about 20 s; resend, and confirm the command ran from a timestamp or value it writes, never from the send returning.
 10. **Prove the live binary matches source.** The build-marker probe reads the new revision (stale = the build did not load). Then read back one value only the new code produces — a new property, a new default, a parameter only the new code writes — and check the saved level does not keep an old value as an override of a changed default.
+    - After a rebuild changing constructor defaults of struct/curve UPROPERTYs, read the CDO **and every placed instance**: serialized overrides can retain old values even when another property adopts its new default (verified 2026-10-08).
+    - For a stale default, call `actor.modify()`, then `actor.set_editor_property(name, unreal.get_default_object(cls).get_editor_property(name))`; save only its package with `pkg = actor.get_outermost()` and `unreal.EditorLoadingAndSavingUtils.save_packages([pkg], False)` (including OFPA external actors), check save success and read back.
+    - A `CallInEditor`-only UFUNCTION is not callable from Python unless also `BlueprintCallable`; use the property-copy route for such Reset buttons.
 11. Only then run the change's tests and trials.
 
 ## Plugins the change needs
