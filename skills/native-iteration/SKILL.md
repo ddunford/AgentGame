@@ -57,6 +57,8 @@ UnrealEditor-Cmd.exe "<uproject>" -ExecCmds="Automation RunTests <Filter>;Quit" 
 - It loads the same binaries on disk as the next editor launch, so it also proves the persistent build (not a Live Coding patch) carries the change. It is a second editor process: never run it while a build is linking, and never kill editors by image name.
 
 ## Crashes
+**A freshly built module that will not load** ("The game module ... could not be loaded", log `Failed to load '<module>.dll' (GetLastError=4551)`, often after a long hang) is Windows Code Integrity / Smart App Control blocking an unsigned new DLL, not a code fault. Check the `Microsoft-Windows-CodeIntegrity/Operational` event log (events 3033/3077/3118 name the DLL) and `HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy` `VerifiedAndReputablePolicyState` (1 = on). Smart App Control has no per-folder exception; turning it off is the owner's security call (one-way in Windows). Shipping builds face the same reputation check on players' machines, so distributed binaries need code signing (verified 2026-10-08).
+
 Copy (never move) the crash folder and logs to a recovery location before relaunching, and check for hardware errors before blaming the build (`guides/tooling-ue.md`). Record the time, last command and log tail. A cause is a hypothesis until a repro or a source read proves it.
 
 ## Evidence required
