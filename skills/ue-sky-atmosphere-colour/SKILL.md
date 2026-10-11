@@ -6,6 +6,9 @@ fires-when: A SkyAtmosphere twilight is mauve, the sunset glow is missing, or gr
 
 # UE sky-atmosphere colour
 
+For cloud shape, tornado compositing and renderer-versus-shape bounds, use
+[realistic-weather-rendering](../realistic-weather-rendering/SKILL.md).
+
 **Owner: `lighting-artist`.** Use `verify-engine-claim` for engine assertions and a fresh visual reviewer for
 acceptance. This procedure records source and measured findings verified 2026-10-08; numeric trial outcomes are
 diagnostics from one scene, not universal settings or a visual pass. Keep project evidence paths in the project's
