@@ -140,6 +140,27 @@ The combined flag/black-albedo case won 10/11 non-tied blind pairs and cost +0.1
 in PIE, but retained sun-facing top clipping (up to 7.9%), seed-dependent warm ground tint and
 failed absolute realism. Record the tradeoffs; this is a diagnostic route, not a universal preset.
 
+## Distant translucency
+
+Verified in UE 5.8 editor PIE on 2026-10-11. Gate material readiness on `IsCompilationFinished()`,
+a non-null `GetGameThreadShaderMap()` and no compile errors. Do not gate visibility on
+`FMaterialResource::IsGameThreadShaderMapComplete()`: it requires every permutation
+(`MaterialShared.cpp:1290-1294`; cooked shipping/test assume completeness). Editor shader maps fill
+on demand, so a mesh hidden by this gate never requests the permutations needed to become visible.
+
+Distant translucent sheets can disappear into fog colour while the volumetric cloud above remains
+visible; the cloud body is not fogged the same way. In the measured 10-30 km case, opacity 1 / optical
+depth 12 changed the sky by only 2-3 8-bit levels. Disabling `use_translucency_vertex_fog`,
+`compute_fog_per_pixel` and `apply_cloud_fogging` made grey shafts readable at 5/15/30 km.
+Unlit sky-relative emissive (`SkyAtmosphereViewLuminance` x shade) keeps sheets readable beyond the
+translucency lighting volume range; this is not universal realism acceptance.
+
+Compare with a no-sheet frame from the same seeded view, holding time, camera and exposure fixed.
+Inspect a x20 amplified difference: a correctly placed faint patch points to colour (fog/lighting);
+no patch points to geometry, parameters or readiness gating. Read back live component count,
+visibility and material-instance parameters before tuning. Retain original frames alongside the
+amplified diagnostic; amplification is not evidence of player-visible contrast.
+
 ## Evidence and acceptance
 
 Retain per-shot state, seed, geometric sun elevation, camera, exposure, ON/OFF frames, baseline repeat noise,
