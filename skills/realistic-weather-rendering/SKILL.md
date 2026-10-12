@@ -11,8 +11,8 @@ Generate varied weather from options, seed and simulation time. Expose tunable r
 deterministic seeking. Do not substitute a fixed scene for a weather system. Use
 [ue-sky-atmosphere-colour](../ue-sky-atmosphere-colour/SKILL.md) for atmosphere and exposure diagnosis.
 
-Evidence labels matter: **Verified** below means UE 5.8 source or cited research checked on 2026-10-08/11,
-not a live visual or cost pass. **Inferred** means a working interpretation. **Untested** means a proposed
+Evidence labels matter: **Verified** identifies the stated source/research check or dated live bound. Source/research verification on 2026-10-08/11 is
+not a live visual or cost pass; live bounds report their own limitations. **Inferred** means a working interpretation. **Untested** means a proposed
 experiment. Recheck engine paths on other versions. Keep project captures, hashes, runtime readbacks and
 research records in the project's companion skill; this generic method carries no project assets.
 
@@ -74,16 +74,37 @@ Reference: [Epic Volumetric Cloud](https://dev.epicgames.com/documentation/en-us
 
 ## Coarse simulation and HV safeguards (verified live on UE 5.8, 2026-10-12)
 
-A raw 50 m LES grid gives better macro mass but can still render as smooth blobs with blurred rims and
-ragged, rounded bases. In the tested frame, HV downsample 1 did not sharpen versus 3; lighting fill removed
-charcoal shading without fixing shape. Physically simulated macro shape still needs sub-grid detail for crisp
-cumulus rims. **Untested bound:** advected, detail-only boundary erosion at 10–25 m render steps versus a
-25 m simulation (8x voxel count). Physical provenance is not visual acceptance.
+A raw 50 m LES grid can supply macro mass while missing sharp cauliflower rims. Sub-grid material detail
+improved static-frame scores from best 3/10 to best 4/10 in the dated bound, never reaching its >=5 gate.
+Physical provenance and individual gains do not establish photographic realism, motion or packaged performance.
+
+- Derive edge distance as `(qc-threshold)/|grad qc|`, using half-voxel taps in the boundary band.
+  A nominal threshold/voxel gradient was ~50x too small: a nominal 100 m displacement moved the edge ~2 m.
+  Density must jump to a core floor inside the displaced level set; otherwise the qc ramp leaves rims
+  one 50 m voxel soft. A .3 g/kg floor produced crisp rims in the tested frame.
+- Keep the fill-visibility proxy local: whole-voxel (50 m) attenuation blacked out dense rims; ~7.5 m
+  restored soft shading. Do not mistake lost ambient fill for stronger cloud structure.
+- Shadow step must be <= the finest detail scale. A 100 m shadow step blotched 30–100 m detail;
+  25 m steps smoothed it. HV downsample 1 and disabling upsample/filter did not sharpen this coarse-data bound.
+- The tested native HV sunlight path is single-scatter only: a zero-fill bound produced light-grey sunlit
+  faces and black shade. Added sunlight MS octaves 1–3 in emissive with six sun-ward taps produced white tops.
+  Sky fill is not a substitute for scattering of sunlight; added MS still did not pass the overall look.
+- Keep a flat-base occupancy band shallow relative to cloud depth. A 200 m band with +100/+200 m
+  occupancy samples extruded thin clouds into vertical-sided slabs. A 75 m band with +50/+75 m
+  samples and band noise removed those boxes. This is a tested bound, not a universal cloud thickness.
+- Match reference species: humilis-only photographs made mediocris renders appear systematically too tall.
+  Use humilis, mediocris or congestus references as appropriate, with matched light and angular size.
+  Full-resolution narrow-FOV study frames expose fine structure hidden in upscaled viewport crops;
+  label them STUDY and retain player-view acceptance. Judge variation is about +/-1 point: compare
+  candidates within one blind judge run, not separate runs as if they were calibrated measurements.
 
 For the tested editor-Python HV material/import route:
-- Connect single-input material nodes with pin `''`, not `'Input'`.
-- Use `BLEND_ADDITIVE` for the Volume material.
-- `EditorAssetLibrary` metadata is unreadable in PIE; validate an import sidecar JSON instead.
+- Connect single-input material nodes with pin `''`, not `'Input'`; use `BLEND_ADDITIVE` for Volume materials.
+- Editor Python cannot spawn actors into PIE on this route. Pre-place the volume and study camera in the
+  editor, remove them after testing, and do not save the dirty external-actor package left by removing
+  an unsaved study camera.
+- `EditorAssetLibrary` metadata is unreadable in PIE (three occurrences). Validate via the **import
+  readback JSON**, not PIE asset metadata.
 - After `set_volume_resolution`, change the transform (nudge) to refresh bounds; an unchanged transform is
   insufficient. `Engine/Source/Runtime/Engine/Private/Components/HeterogeneousVolumeComponent.cpp:371`
   computes `CalcBounds` from `VolumeResolution`. Verify the resulting bounds.
