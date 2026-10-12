@@ -72,6 +72,22 @@ Reference: [Epic Volumetric Cloud](https://dev.epicgames.com/documentation/en-us
   [Epic's documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/heterogeneous-volumes-in-unreal-engine)
   calls it Experimental. Its dense lighting cache and voxel/step budgets require measurement, not assumed savings.
 
+## Coarse simulation and HV safeguards (verified live on UE 5.8, 2026-10-12)
+
+A raw 50 m LES grid gives better macro mass but can still render as smooth blobs with blurred rims and
+ragged, rounded bases. In the tested frame, HV downsample 1 did not sharpen versus 3; lighting fill removed
+charcoal shading without fixing shape. Physically simulated macro shape still needs sub-grid detail for crisp
+cumulus rims. **Untested bound:** advected, detail-only boundary erosion at 10–25 m render steps versus a
+25 m simulation (8x voxel count). Physical provenance is not visual acceptance.
+
+For the tested editor-Python HV material/import route:
+- Connect single-input material nodes with pin `''`, not `'Input'`.
+- Use `BLEND_ADDITIVE` for the Volume material.
+- `EditorAssetLibrary` metadata is unreadable in PIE; validate an import sidecar JSON instead.
+- After `set_volume_resolution`, change the transform (nudge) to refresh bounds; an unchanged transform is
+  insufficient. `Engine/Source/Runtime/Engine/Private/Components/HeterogeneousVolumeComponent.cpp:371`
+  computes `CalcBounds` from `VolumeResolution`. Verify the resulting bounds.
+
 ## Verified references; inferred generator method
 
 [Nubis 2015](https://www.advances.realtimerendering.com/s2015/The%20Real-time%20Volumetric%20Cloudscapes%20of%20Horizon%20-%20Zero%20Dawn%20-%20ARTR.pdf)
