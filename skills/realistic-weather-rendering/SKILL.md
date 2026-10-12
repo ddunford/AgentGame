@@ -196,3 +196,11 @@ study views, independent review and GPU measurements. Stop after repeated failed
 If all routes fail, the integrator is a hypothesis, not a proven ceiling: check import, scale, lighting parity and
 reference suitability before bounding a material dark-edge term or custom march. Record remaining failures,
 motion evidence and packaged performance separately. Research and compilation never constitute visual acceptance.
+
+## Match references to the simulated air mass
+
+A seeded hazy or humid day is supposed to have a milky sky; judging it against clear-air photos blames the atmosphere
+model for the weather you asked for. Before changing scattering coefficients, measure the top-of-frame sky crop (mean
+RGB, R/B, luminance) against photos taken in the same kind of air, and test the air mass itself (turbidity, mist) as
+the first lever. Verified on UE 5.8, 2026-10-12: clean air moved sky R/B 0.84 -> ~0.6 and the blind sky score 4 -> 6.5;
+alternative Rayleigh coefficients and lower exposure did not help.
